@@ -18,3 +18,7 @@ __pycache__/
 media/
 
 db.sqlite3
+
+api/migrations/
+
+tests/
