@@ -4,6 +4,15 @@ from django.db import models
 User = get_user_model()
 
 
+class Group(models.Model):
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=100, unique=True)
+    description = models.TextField(max_length=200)
+
+    def __str__(self):
+        return self.title
+
+
 class Post(models.Model):
     text = models.TextField()
     pub_date = models.DateTimeField("Дата публикации", auto_now_add=True)
@@ -11,6 +20,13 @@ class Post(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="posts"
+    )
+    group = models.ForeignKey(
+        Group,
+        on_delete=models.CASCADE,
+        related_name="group_posts",
+        blank=True,
+        null=True
     )
 
     def __str__(self):
@@ -46,32 +62,4 @@ class Follow(models.Model):
         related_name='following',
         on_delete=models.CASCADE
     )
-
-    class Meta:
-        verbose_name = 'Подписка'
-        constraints = [
-            models.UniqueConstraint(fields=['user', 'author'],
-                                    name='unique relationship')]
-
-
-class Group(models.Model):
-    title = models.CharField(
-        'Название группы',
-        help_text='Дайте короткое название группы',
-        max_length=200
-    )
-    slug = models.SlugField(
-        'Адрес для страницы группы',
-        help_text=('Укажите адрес для страницы группы. Используйте только '
-                   'латиницу, цифры, дефисы и знаки подчёркивания'),
-        max_length=100,
-        unique=True
-    )
-    description = models.TextField(
-        'Описание группы',
-        help_text='Дайте короткое описание группы',
-        max_length=200
-    )
-
-    def __str__(self):
-        return self.title
+    unique_together = ('user', 'author')

@@ -15,7 +15,7 @@ router.register(r'group', GroupViewSet, basename='group')
 router.register(r'follow', FollowViewSet, basename='follow')
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('v1/', include(router.urls)),
     path(
         'token/',
         TokenObtainPairView.as_view(),

@@ -1,4 +1,4 @@
-# TODO:  Напишите свой вариант
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
@@ -13,6 +13,8 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsAuthorOrReadOnly, IsAuthenticated)
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['group', ]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -20,7 +22,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = (IsAuthorOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated)
 
     def get_queryset(self):
         post = get_object_or_404(Post, pk=self.kwargs.get('post_pk'))
@@ -33,9 +35,11 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
+    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated)
     pass
 
 
 class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
+    permission_classes = (IsAuthorOrReadOnly, IsAuthenticated)
     pass
