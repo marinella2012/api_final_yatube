@@ -5,9 +5,8 @@ User = get_user_model()
 
 
 class Group(models.Model):
-    title = models.CharField(max_length=200)
-    slug = models.SlugField(max_length=100, unique=True)
-    description = models.TextField(max_length=200)
+    title = models.CharField(max_length=400)
+    description = models.TextField(max_length=400, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -57,9 +56,9 @@ class Follow(models.Model):
         related_name='follower',
         on_delete=models.CASCADE
     )
-    author = models.ForeignKey(
+    following = models.ForeignKey(
         User,
         related_name='following',
         on_delete=models.CASCADE
     )
-    unique_together = ('user', 'author')
+    unique_together = ('user', 'following')
