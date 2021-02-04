@@ -19,6 +19,7 @@ media/
 
 db.sqlite3
 
-api/migrations/
+migrations/
 
 tests/
+
