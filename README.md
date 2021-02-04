@@ -3,5 +3,7 @@
 
 URL | Anon | Authenticated
 ------------ | ------------- | -------------
-Content from cell 1 | Content from cell | 2 Content from cell 2
-Content in the first column | Content in the second column |  Content from cell 2
+api/v1/posts/ | GET | GET, POST, PUT, PATCH, DELETE
+api/v1/group/ | GET | GET, POST
+api/v1/comments/ | GET | GET, POST, PUT, PATCH, DELETE
+api/v1/follow/ | - | GET, POST
