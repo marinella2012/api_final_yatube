@@ -46,7 +46,6 @@ class FollowSerializer(serializers.ModelSerializer):
     )
 
     def validate(self, data):
-        print(data)
         if (
             data['user'] == data['following'] and
             self.context['request'].method == 'POST'
