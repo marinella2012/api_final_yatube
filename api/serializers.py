@@ -51,7 +51,7 @@ class FollowSerializer(serializers.ModelSerializer):
             self.context['request'].method == 'POST'
         ):
             raise serializers.ValidationError(
-                'Вы yне помжете подписаться сами на себя')
+                'Вы не можете подписаться сами на себя')
         return data
 
     class Meta:
