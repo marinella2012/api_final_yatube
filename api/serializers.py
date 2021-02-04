@@ -52,7 +52,7 @@ class FollowSerializer(serializers.ModelSerializer):
             self.context['request'].method == 'POST'
         ):
             raise serializers.ValidationError(
-                'Вы уже подписаны на этого автора')
+                'Вы yне помжете подписаться сами на себя')
         return data
 
     class Meta:
