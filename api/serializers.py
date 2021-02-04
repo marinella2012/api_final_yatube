@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from .models import Comment, Follow, Group, Post
+from .models import Comment, Follow, Group, Post, User
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -26,16 +27,41 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
 
 
-class FollowSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')
-
-    class Meta:
-        fields = '__all__'
-        model = Follow
-
-
 class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = '__all__'
         model = Group
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all(),
+        default=serializers.CurrentUserDefault()
+    )
+    following = serializers.SlugRelatedField(
+        slug_field='username',
+        queryset=User.objects.all()
+    )
+
+    def validate(self, data):
+        print(data)
+        if (
+            data['user'] == data['following'] and
+            self.context['request'].method == 'POST'
+        ):
+            raise serializers.ValidationError(
+                'Вы уже подписаны на этого автора')
+        return data
+
+    class Meta:
+        fields = '__all__'
+        model = Follow
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=['user', 'following'],
+                message='Вы не можете подписаться дважды на одного автора'
+            )
+        ]
