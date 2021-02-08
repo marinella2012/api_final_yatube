@@ -1,4 +1,3 @@
-# api_final
 Финальный проект API Yatube
 
 URL | Anon | Authenticated
